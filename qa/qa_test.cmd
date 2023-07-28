@@ -1,0 +1,1 @@
+"../_export/mysh-release-static-windows-x86-64-gcc-11.exe" shell_commands.sh

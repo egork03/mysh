@@ -1,0 +1,23 @@
+# #
+# #
+# #
+
+project
+    : requirements 
+	<library>///base.LIB
+    ;
+
+SRC-DIR = ./../src ;
+
+# #         +---------------------------+----------------------------------------------+----------------------------------------------+------------------------------------+
+# #         |                           |                                              |                                              |                                    |
+# #         |          name             |                      input file(s)           |          requirements                        |    default build requirements      |
+# #         |                           |                                              |                                              |                                    |
+# #         +---------------------------+----------------------------------------------+----------------------------------------------+------------------------------------+
+unit-test         lexer-test            : lexer-test.c      
+                                          $(SRC-DIR)//token.OBJ
+                                          $(SRC-DIR)//lexer.OBJ
+                                                                                       : <include>$(SRC-DIR)                          :                                    ;
+
+unit-test         glob-test             : glob-test.c       $(SRC-DIR)//glob.OBJ       : <include>$(SRC-DIR)                          :                                    ;
+unit-test         translator-test       : translator-test.c $(SRC-DIR)//translator.OBJ : <include>$(SRC-DIR)                          :                                    ;

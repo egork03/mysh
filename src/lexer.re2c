@@ -1,0 +1,105 @@
+// Copyright (c) 2023 Egor Kosmachev
+// Licensed under the MIT license.
+
+#include "lexer.h"
+
+char const* lexer(char const* cur, token_t* t)
+{
+	char const* YYMARKER;
+
+    /*!re2c
+        re2c:yyfill:enable = 0;
+        re2c:define:YYCTYPE = char;
+        re2c:define:YYCURSOR = cur;
+        re2c:flags:case-insensitive = 0;
+	*/
+
+	while(1)
+	{
+		char const* s = cur;
+
+    /*!re2c
+		WHITESPACE = [\x20];
+
+		[\x00\n]
+							{
+								--cur;
+								token_compose(t, TOKEN_EOF, s, 0);
+								return cur;
+							}
+
+		WHITESPACE+         { continue; }
+
+		'cd'
+							{
+								token_compose(t, TOKEN_COMMAND_CD, s, 2);
+								return cur;
+							}
+
+		'pwd'
+							{
+								token_compose(t, TOKEN_COMMAND_PWD, s, 3);
+								return cur;
+							}
+
+		'exit'
+							{
+								token_compose(t, TOKEN_COMMAND_EXIT, s, 4);
+								return cur;
+							}
+
+		'<'
+							{
+								token_compose(t, TOKEN_REDIRECTION_IN, s, 1);
+								return cur;
+							}
+
+		'>'
+							{
+								token_compose(t, TOKEN_REDIRECTION_OUT, s, 1);
+								return cur;
+							}
+		'|'
+							{
+								token_compose(t, TOKEN_PIPE, s, 1);
+								return cur;
+							}
+		'||'
+							{
+								token_compose(t, TOKEN_OR, s, 2);
+								return cur;
+							}
+		'&&'
+							{
+								token_compose(t, TOKEN_AND, s, 2);
+								return cur;
+							}
+		*
+							{
+								goto path;
+							}
+    */
+
+	}
+
+path:
+	;
+	char const* path_start = cur - 1;
+	while(1)
+	{
+    /*!re2c
+		[\x00\n\x20<>|&]
+							{
+								--cur;
+								token_compose(t, TOKEN_PATH, path_start, cur - path_start);
+								return cur;
+							}
+
+		*
+							{
+								continue;
+							}
+    */
+
+	}
+}

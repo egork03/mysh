@@ -1,0 +1,20 @@
+# #
+# #
+# #
+BASE-LIB-DIR = ./base/lib ;
+BASE-INC-DIR = ./base/include ;
+
+# #  +----------+-----+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------+----------------------------+
+# #  |   alias  | src |                        reqs                                                                                                                                                 | default |     usage-reqs             |
+# #  +----------+-----+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------+----------------------------+
+lib  base.LIB   :     : <file>$(BASE-LIB-DIR)/libbase-debug-static-linux-x86-64-gcc-11.a        <variant>debug-static     <target-os>linux <architecture>x86 <address-model>64    <toolset>gcc   :         : <include>$(BASE-INC-DIR)   ;
+lib  base.LIB   :     : <file>$(BASE-LIB-DIR)/libbase-release-static-linux-x86-64-gcc-11.a      <variant>release-static   <target-os>linux <architecture>x86 <address-model>64    <toolset>gcc   :         : <include>$(BASE-INC-DIR)   ;
+lib  base.LIB   :     : <file>$(BASE-LIB-DIR)/libbase-debug-static-cygwin-x86-64-gcc-11.a       <variant>debug-static     <target-os>cygwin <architecture>x86 <address-model>64   <toolset>gcc   :         : <include>$(BASE-INC-DIR)   ;
+lib  base.LIB   :     : <file>$(BASE-LIB-DIR)/libbase-release-static-cygwin-x86-64-gcc-11.a     <variant>release-static   <target-os>cygwin <architecture>x86 <address-model>64   <toolset>gcc   :         : <include>$(BASE-INC-DIR)   ;
+lib  base.LIB   :     : <file>$(BASE-LIB-DIR)/libbase-debug-static-windows-x86-64-gcc-11.a       <variant>debug-static    <target-os>windows <architecture>x86 <address-model>64  <toolset>gcc   :         : <include>$(BASE-INC-DIR)   ;
+lib  base.LIB   :     : <file>$(BASE-LIB-DIR)/libbase-release-static-windows-x86-64-gcc-11.a     <variant>release-static  <target-os>windows <architecture>x86 <address-model>64  <toolset>gcc   :         : <include>$(BASE-INC-DIR)   ;
+lib  base.LIB   :     : <file>$(BASE-LIB-DIR)/libbase-debug-static-windows-x86-64-msvc-14.2.lib     <variant>debug-static    <target-os>windows <architecture>x86 <address-model>64  <toolset>msvc  :         : <include>$(BASE-INC-DIR)   ;
+lib  base.LIB   :     : <file>$(BASE-LIB-DIR)/libbase-release-static-windows-x86-64-msvc-14.2.lib   <variant>release-static  <target-os>windows <architecture>x86 <address-model>64  <toolset>msvc  :         : <include>$(BASE-INC-DIR)   ;
+
+explicit base.LIB ;
+

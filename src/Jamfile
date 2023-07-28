@@ -1,0 +1,27 @@
+# #
+# #
+# #
+
+path-constant lexout : ./lexer.c ;
+
+# #         +---------------------------+----------------------------------------------+----------------------------------------------+------------------------------------+
+# #         |                           |                                              |                                              |                                    |
+# #         |          name             |                      input file(s)           |          requirements                        |    default build requirements      |
+# #         |                           |                                              |                                              |                                    |
+# #         +---------------------------+----------------------------------------------+----------------------------------------------+------------------------------------+
+make              lexout                : lexer.re2c                                   : @in2out                                      ;
+obj               lexer.OBJ             : lexout.c                                     : <library>///base.LIB                         :                                    ;
+obj               glob.OBJ              : glob.c                                       : <library>///base.LIB                         :                                    ;
+obj               mysh.OBJ              : mysh.c                                       : <library>///base.LIB                         :                                    ;
+obj               parser.OBJ            : parser.c                                     : <library>///base.LIB                         :                                    ;
+obj               token.OBJ             : token.c                                      : <library>///base.LIB                         :                                    ;
+obj               command.OBJ           : command.c                                    : <library>///base.LIB                         :                                    ;
+obj               translator.OBJ        : translator.c                                 : <library>///base.LIB                         :                                    ;
+
+exe               mysh.EXE              : lexer.OBJ glob.OBJ mysh.OBJ translator.OBJ
+                                          parser.OBJ token.OBJ command.OBJ             : <library>///base.LIB                         :                                    ;
+
+actions in2out
+{
+	re2c --no-generation-date --nested-ifs -s -W -o lexout.c $(>)
+}

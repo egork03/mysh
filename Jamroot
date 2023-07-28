@@ -1,0 +1,89 @@
+# # 
+# # 
+# # 
+import testing ;
+
+COMMON-CODE-GEN = 
+	<threading>single
+	<rtti>off
+	<exception-handling>off
+	<extern-c-nothrow>on
+	<cxxstd>latest
+	<threadapi>pthread #irrelevant
+;
+
+COMMON-CODE-GEN-STATIC = 
+	<link>static
+	<runtime-link>static
+;
+
+variant debug-static   :   debug : $(COMMON-CODE-GEN) $(COMMON-CODE-GEN-STATIC) ;
+variant release-static : release : $(COMMON-CODE-GEN) $(COMMON-CODE-GEN-STATIC) ;
+
+SUPPORTED-VARIANTS = 
+	debug-static
+	release-static
+;
+
+project /
+    : build-dir 
+		"./../.bin/mysh"
+
+    : default-build 
+		<variant>debug-static
+		<link>static
+		<architecture>x86
+		<address-model>64
+		<threadapi>pthread #irrelevant
+
+    : requirements 
+		# versioning
+		<tag>@export-naming
+
+		# testing
+		<preserve-test-targets>on
+
+;
+
+rule export-naming ( name : type ? : property-set )
+{
+    import type ;
+    import virtual-target ;
+
+    if 
+	! [ type.is-derived $(type) H ]
+	    && 
+	! [ type.is-derived $(type) CPP ]
+	    && 
+	! [ type.is-derived $(type) C ]
+    {
+		local variant         = [ $(property-set).get <variant> ] ;
+		# local link            = [ $(property-set).get <link> ] ;
+		local target-os       = [ $(property-set).get <target-os> ] ;
+		local arch            = [ $(property-set).get <architecture> ] ; 
+		local address-model   = [ $(property-set).get <address-model> ] ;
+		local toolset         = [ $(property-set).get <toolset> ] ;
+
+		if ! $(variant) in $(SUPPORTED-VARIANTS)
+		{
+            import errors : error : errors.error ;
+            errors.error "Unsupported <variant>$(variant). Supported variants are the following:" $(SUPPORTED-VARIANTS:J=", ") ;
+		}
+
+		local tags ; 
+		tags = ;
+		tags += $(variant) ;
+		# tags += $(link) ;
+
+		tags += $(target-os) ;
+		tags += $(instruction-set) ;
+		tags += $(arch) ;
+		tags += $(address-model) ;
+
+		tags +=  $(toolset) ;
+		tags += [ $(property-set).get <toolset-$(toolset):version> ] ;
+
+		return [ virtual-target.add-prefix-and-suffix $(name)-$(tags:J="-") : $(type) : $(property-set) ] ;
+    }
+}
+
